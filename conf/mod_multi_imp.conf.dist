@@ -1,0 +1,28 @@
+[worldserver]
+
+########################################
+# mod-multi-imp
+########################################
+
+# Master switch.
+# Default: 1
+MultiImp.Enable = 1
+
+# Extra imps spawned on every Summon Imp cast, in addition to the real pet
+# (2 => 3 imps in total). Range 0-9.
+# Default: 2
+MultiImp.ExtraCount = 2
+
+# How often the extra imps copy the state of the real imp (react state,
+# follow/stay, target) and get topped up after combat. Milliseconds, min 100.
+# Default: 500
+MultiImp.SyncIntervalMs = 500
+
+# Also give warlock playerbots extra imps. Costs CPU with many bots.
+# Default: 0
+MultiImp.IncludeBots = 0
+
+# Extra imps cast Firebolt (highest rank the real imp knows). Guardians get no
+# pet AI from the core, without this they would only melee.
+# Default: 1
+MultiImp.CastFirebolt = 1
