@@ -31,7 +31,8 @@
 namespace
 {
     constexpr uint32 SPELL_SUMMON_IMP = 688;
-    constexpr uint32 NPC_IMP = 416;
+    // NPC_IMP (416) now comes from the core's NPCEntries enum in PetDefines.h (included above);
+    // a local copy here would be an ambiguous symbol, so we use the core one.
 
     // Category ALLY, Type GUARDIAN, Slot 0. Must not be a PET category, see file header.
     constexpr uint32 SUMMON_PROPERTIES_GUARDIAN = 61;
