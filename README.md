@@ -1,5 +1,10 @@
 # mod-multi-imp
 
+<!-- links:start -->
+[![Support me on Ko-fi](https://malura.de/assets/badge/kofi.svg)](https://malura.de/go/kofi?ref=mod-multi-imp)
+[![Check out my page](https://malura.de/assets/badge/malura.svg)](https://malura.de/go/site?ref=mod-multi-imp)
+<!-- links:end -->
+
 Lets a warlock have more than one imp (Kanboard ticket #778).
 
 - The real imp stays the only "Pet": pet bar, DB persistence, talents.
