@@ -26,6 +26,8 @@
 #include "WorldSession.h"
 #include <algorithm>
 #include <array>
+#include <type_traits>
+#include <utility>
 #include <vector>
 
 namespace
@@ -52,6 +54,38 @@ namespace
     };
 
     MultiImpConfig sCfg;
+
+    // Bots are sessions without a socket. AzerothCore marks them with WorldSession::IsHeadless();
+    // older playerbots core forks have WorldSession::IsBot() instead, and older stock cores have
+    // neither. Looking for both at compile time lets the module build on all of them.
+    template <typename Session, typename = void>
+    struct HasIsHeadless : std::false_type { };
+
+    template <typename Session>
+    struct HasIsHeadless<Session, std::void_t<decltype(std::declval<Session&>().IsHeadless())>> : std::true_type { };
+
+    template <typename Session, typename = void>
+    struct HasIsBot : std::false_type { };
+
+    template <typename Session>
+    struct HasIsBot<Session, std::void_t<decltype(std::declval<Session&>().IsBot())>> : std::true_type { };
+
+    template <typename Session>
+    bool IsBotSession(Session* session)
+    {
+        if constexpr (HasIsHeadless<Session>::value)
+            return session->IsHeadless();
+        else if constexpr (HasIsBot<Session>::value)
+            return session->IsBot();
+        else
+            return false;
+    }
+
+    bool IsBotPlayer(Player* player)
+    {
+        WorldSession* session = player->GetSession();
+        return session && IsBotSession(session);
+    }
 
     // Per-player state, lives in Player::CustomData (map updates run in several threads).
     struct MultiImpData : public DataMap::Base
@@ -258,7 +292,7 @@ public:
             return;
 
         Player* player = caster->ToPlayer();
-        if (!player || (!sCfg.includeBots && player->GetSession()->IsBot()))
+        if (!player || (!sCfg.includeBots && IsBotPlayer(player)))
             return;
 
         // the real imp is created by the spell's own effect, which has already run at this point
